@@ -1,0 +1,43 @@
+name: Scoperta automatica nuovi bandi
+
+# Ogni lunedì alle 08:00 ora italiana (06:00 UTC)
+# Oppure manualmente da GitHub → Actions → Run workflow
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Installa Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Installa dipendenze
+        run: pip install -r scripts/requirements.txt
+
+      - name: Scopri nuovi bandi e aggiorna index.html
+        run: python scripts/discover_calls.py
+
+      - name: Pubblica su GitHub Pages (commit automatico)
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html scripts/discovery_log.md
+          if git diff --staged --quiet; then
+            echo "Nessun nuovo bando trovato — nessuna modifica."
+          else
+            git commit -m "feat: nuovi bandi aggiunti automaticamente [$(date -u +%Y-%m-%d)]"
+            git push
+            echo "✅ index.html aggiornato e pubblicato."
+          fi
