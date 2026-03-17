@@ -419,7 +419,7 @@
     <a href="https://www.uniba.it" target="_blank" rel="noopener">uniba.it</a>
     &nbsp;·&nbsp; Grant Office — Università degli Studi di Bari Aldo Moro
   </span>
-  <span>⟳ Updated: 17 March 2026</span>
+  <span>⟳ Updated: 13 March 2026</span>
 </div>
 
 <!-- Main header — Bootstrap Italia white header with real UniBA logo -->
@@ -440,7 +440,7 @@
     <h1>📡 Active Funding Calls — Scouting Dashboard</h1>
     <p>European · National Italy · Regional Puglia — continuously updated</p>
   </div>
-  <span class="last-update">⟳ 17 March 2026</span>
+  <span class="last-update">⟳ 13 March 2026</span>
 </header>
 
 <!-- Navigation strip (Bootstrap Italia primary nav) -->
@@ -485,6 +485,20 @@
     Hide expired
   </label>
   <button class="btn-reset" onclick="resetFilters()">✕ Reset</button>
+  <button class="btn-reset" onclick="toggleDiscoverPanel()" id="btnDiscover" title="Discover new open calls from EU Funding Portal (RIA, IA, MSCA, EIC, ERC, LIFE…)" style="background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.5);">🔍 Discover new calls</button>
+</div>
+
+<!-- ── DISCOVER PANEL ── -->
+<div id="discoverPanel" style="display:none;background:#f0f6ff;border-bottom:2px solid #0066CC;padding:14px 32px;">
+  <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:8px;">
+    <span style="font-size:13px;font-weight:700;color:#004080;">🔍 Automatic call discovery</span>
+    <span style="font-size:11px;color:#557;flex:1;">Queries EU Funding &amp; Tenders Portal — all open calls (RIA, IA, CSA, Horizon Clusters, MSCA, EIC, ERC, LIFE…) sorted by deadline.</span>
+    <button onclick="runDiscovery()" id="btnRunDiscover"
+            style="padding:8px 18px;background:#0066CC;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:700;">▶ Discover now</button>
+    <button onclick="document.getElementById('discoverPanel').style.display='none'"
+            style="padding:8px 12px;background:transparent;border:1px solid #aac;border-radius:6px;cursor:pointer;font-size:13px;color:#555;">✕</button>
+  </div>
+  <div id="discoverStatus" style="font-size:12px;color:#555;min-height:18px;line-height:1.6;"></div>
 </div>
 
 <!-- Search hint -->
@@ -619,6 +633,22 @@
         </div>
       </div>
 
+      <div class="card urgency-high" data-category="europeo"
+           data-kw="zero pollution cl6 HORIZON-CL6-ZEROPOLLUTION air water soil pollution monitoring chemicals environment">
+        <div class="card-top">
+          <span class="card-title">HORIZON-CL6-2026 — Zero Pollution</span>
+          <span class="badge-program bp-horizon">Horizon Europe</span>
+        </div>
+        <p class="card-desc">Zero Pollution Ambition: air, water and soil pollution reduction and monitoring, chemical risk, environmental health. Part of the Green Deal. RIA/IA topics with April and September deadlines.</p>
+        <div class="card-meta">
+          <span class="tag">Zero Pollution</span><span class="tag">Air / Water / Soil</span><span class="tag">RIA / IA</span><span class="tag">Green Deal</span>
+        </div>
+        <div class="card-footer">
+          <div class="deadline"><span class="deadline-icon">📅</span>15 April / 17 Sep 2026<span class="days-left" id="dl-zp"></span></div>
+          <a class="card-link" href="https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/calls-for-proposals?keywords=zero+pollution&programmePeriod=2021-2027&frameworkProgramme=HORIZON" target="_blank" rel="noopener">Portal ↗</a>
+        </div>
+      </div>
+
       <div class="card urgency-medium" data-category="europeo"
            data-kw="research infrastructures ESFRI RI laboratories facilities access governance">
         <div class="card-top">
@@ -632,6 +662,54 @@
         <div class="card-footer">
           <div class="deadline"><span class="deadline-icon">📅</span>16 June 2026<span class="days-left" id="dl-ri"></span></div>
           <a class="card-link" href="https://ec.europa.eu/info/funding-tenders/opportunities/portal/" target="_blank" rel="noopener">Portal ↗</a>
+        </div>
+      </div>
+
+      <div class="card urgency-low" data-category="europeo"
+           data-kw="horizon widening widera ERA4 twinning teaming ERA chairs southern Europe cohesion widening participation southern Italy">
+        <div class="card-top">
+          <span class="card-title">Horizon Widening 2026 (WIDERA)</span>
+          <span class="badge-program bp-horizon">Horizon Europe</span>
+        </div>
+        <p class="card-desc">Calls for Widening Participation and ERA strengthening: Twinning, Teaming, ERA Chairs. Specifically targets underrepresented countries/regions — very relevant for southern Italian universities.</p>
+        <div class="card-meta">
+          <span class="tag">Twinning / Teaming</span><span class="tag">ERA Chairs</span><span class="tag">South Italy eligible</span>
+        </div>
+        <div class="card-footer">
+          <div class="deadline"><span class="deadline-icon">📅</span>September 2026<span class="days-left" id="dl-widera"></span></div>
+          <a class="card-link" href="https://research-and-innovation.ec.europa.eu/funding/funding-opportunities/funding-programmes-and-open-calls/horizon-europe/horizon-europe-programme-guide/widening-participation-and-spreading-excellence_en" target="_blank" rel="noopener">Portal ↗</a>
+        </div>
+      </div>
+
+      <div class="card urgency-rolling" data-category="europeo"
+           data-kw="COST actions networking european cooperation science technology bottom-up open call consortium 7 countries">
+        <div class="card-top">
+          <span class="card-title">COST Actions — Open Call (Rolling)</span>
+          <span class="badge-program bp-horizon">Horizon Europe</span>
+        </div>
+        <p class="card-desc">Bottom-up networking funding for interdisciplinary research networks. Minimum 7 EU/cooperating countries. Grant ~€130K/year/4 years. Two evaluation rounds per year.</p>
+        <div class="card-meta">
+          <span class="tag">Networking</span><span class="tag">Bottom-up</span><span class="tag">7+ countries</span><span class="tag">Rolling</span>
+        </div>
+        <div class="card-footer">
+          <div class="deadline"><span class="deadline-icon">📅</span>Rolling — 2 rounds/year</div>
+          <a class="card-link" href="https://www.cost.eu/funding/open-call/" target="_blank" rel="noopener">COST ↗</a>
+        </div>
+      </div>
+
+      <div class="card urgency-medium" data-category="europeo"
+           data-kw="PRIMA Mediterranean partnership water food agriculture sustainability climate southern Italy research innovation">
+        <div class="card-top">
+          <span class="card-title">PRIMA Foundation — Section 1 Calls 2026</span>
+          <span class="badge-program bp-horizon">Horizon Europe</span>
+        </div>
+        <p class="card-desc">Mediterranean partnership for R&amp;I on water, food systems, and agri-food sustainability. Section 1: collaborative R&amp;I projects up to €3M. Priority for southern Mediterranean partners.</p>
+        <div class="card-meta">
+          <span class="tag">Mediterranean</span><span class="tag">Water / Food</span><span class="tag">Up to €3M</span>
+        </div>
+        <div class="card-footer">
+          <div class="deadline"><span class="deadline-icon">📅</span>June 2026<span class="days-left" id="dl-prima"></span></div>
+          <a class="card-link" href="https://prima-med.org/opportunities/" target="_blank" rel="noopener">PRIMA ↗</a>
         </div>
       </div>
 
@@ -708,6 +786,22 @@
         <div class="card-footer">
           <div class="deadline"><span class="deadline-icon">📅</span>24 November 2026<span class="days-left" id="dl-dn"></span></div>
           <a class="card-link" href="https://marie-sklodowska-curie-actions.ec.europa.eu/calls/msca-doctoral-networks-2026" target="_blank" rel="noopener">MSCA ↗</a>
+        </div>
+      </div>
+
+      <div class="card urgency-low" data-category="europeo"
+           data-kw="Erasmus+ higher education KA131 KA171 mobility students staff international universities cooperation alliances">
+        <div class="card-top">
+          <span class="card-title">Erasmus+ Higher Education 2026 (KA131/KA171)</span>
+          <span class="badge-program bp-msca">MSCA</span>
+        </div>
+        <p class="card-desc">Student and staff mobility (KA131), international credit mobility with non-EU partners (KA171), and Knowledge Alliances (KA220). Annual accreditation-based. 2026 round now open.</p>
+        <div class="card-meta">
+          <span class="tag">Student mobility</span><span class="tag">Staff exchange</span><span class="tag">International</span>
+        </div>
+        <div class="card-footer">
+          <div class="deadline"><span class="deadline-icon">📅</span>February 2027 (2026/2027 academic year)<span class="days-left" id="dl-erasmus"></span></div>
+          <a class="card-link" href="https://www.erasmus-plus.it/bandi" target="_blank" rel="noopener">Erasmus+ IT ↗</a>
         </div>
       </div>
 
@@ -863,6 +957,38 @@
         </div>
       </div>
 
+      <div class="card urgency-medium" data-category="europeo"
+           data-kw="ERC starting grants StG early career researcher frontier science basic research up to 1.5M all areas">
+        <div class="card-top">
+          <span class="card-title">ERC Starting Grants 2026</span>
+          <span class="badge-program bp-erc">ERC</span>
+        </div>
+        <p class="card-desc">For early-career researchers (2–7 years post-PhD) with a promising research profile. Grant up to €1.5M for 5 years. All scientific disciplines eligible.</p>
+        <div class="card-meta">
+          <span class="tag">Early career</span><span class="tag">Up to €1.5M</span><span class="tag">5 years</span><span class="tag">All areas</span>
+        </div>
+        <div class="card-footer">
+          <div class="deadline"><span class="deadline-icon">📅</span>October 2026 (Step 2)<span class="days-left" id="dl-stg"></span></div>
+          <a class="card-link" href="https://erc.europa.eu/apply-grant/starting-grant" target="_blank" rel="noopener">ERC ↗</a>
+        </div>
+      </div>
+
+      <div class="card urgency-rolling" data-category="europeo"
+           data-kw="ERC consolidator grants CoG mid-career researcher frontier science basic research up to 2M all areas">
+        <div class="card-top">
+          <span class="card-title">ERC Consolidator Grants 2026</span>
+          <span class="badge-program bp-erc">ERC</span>
+        </div>
+        <p class="card-desc">For mid-career researchers (7–12 years post-PhD) consolidating their research team. Grant up to €2M for 5 years. All scientific disciplines.</p>
+        <div class="card-meta">
+          <span class="tag">Mid-career</span><span class="tag">Up to €2M</span><span class="tag">5 years</span><span class="tag">All areas</span>
+        </div>
+        <div class="card-footer">
+          <div class="deadline"><span class="deadline-icon">📅</span>Expected January 2027<span class="days-left" id="dl-cog"></span></div>
+          <a class="card-link" href="https://erc.europa.eu/apply-grant/consolidator-grant" target="_blank" rel="noopener">ERC ↗</a>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -948,18 +1074,34 @@
     <div class="cards-grid">
 
       <div class="card urgency-rolling" data-category="europeo"
-           data-kw="STEP semiconductors AI quantum biotech cleantech digital strategic technologies deep tech">
+           data-kw="STEP semiconductors AI quantum biotech cleantech digital strategic technologies deep tech national european">
         <div class="card-top">
-          <span class="card-title">STEP — Strategic Innovation Call (Tuscany)</span>
+          <span class="card-title">STEP — Strategic Technologies for Europe Platform</span>
           <span class="badge-program bp-step">STEP</span>
         </div>
-        <p class="card-desc">R&amp;D in strategic European technologies (AI, semiconductors, quantum, biotech, cleantech) for companies. Rolling from 16 March 2026.</p>
+        <p class="card-desc">EU-level funding aggregator for strategic European technologies: AI, semiconductors, quantum, biotech, cleantech, deep tech. Cross-border and national calls coordinated at European level.</p>
         <div class="card-meta">
-          <span class="tag">Rolling</span><span class="tag">Companies</span><span class="tag">Strategic technologies</span>
+          <span class="tag">EU Platform</span><span class="tag">Deep Tech</span><span class="tag">Strategic technologies</span>
         </div>
         <div class="card-footer">
-          <div class="deadline"><span class="deadline-icon">📅</span>Rolling (from 16/03/2026)</div>
+          <div class="deadline"><span class="deadline-icon">📅</span>Rolling — multiple calls/year</div>
           <a class="card-link" href="https://strategic-technologies.europa.eu/index_en" target="_blank" rel="noopener">STEP Portal ↗</a>
+        </div>
+      </div>
+
+      <div class="card urgency-rolling" data-category="europeo"
+           data-kw="digital europe programme DEP AI artificial intelligence cloud cybersecurity quantum digital skills infrastructure HPC">
+        <div class="card-top">
+          <span class="card-title">Digital Europe Programme (DEP) 2026</span>
+          <span class="badge-program bp-step">STEP</span>
+        </div>
+        <p class="card-desc">€7.5B programme for AI deployment, cloud/edge, HPC, cybersecurity, digital skills and digital transformation of public administration and SMEs.</p>
+        <div class="card-meta">
+          <span class="tag">AI / Cloud</span><span class="tag">Cybersecurity</span><span class="tag">Digital skills</span><span class="tag">HPC</span>
+        </div>
+        <div class="card-footer">
+          <div class="deadline"><span class="deadline-icon">📅</span>Rolling — see Work Programme 2025-2026</div>
+          <a class="card-link" href="https://digital-strategy.ec.europa.eu/en/activities/digital-programme" target="_blank" rel="noopener">DEP Portal ↗</a>
         </div>
       </div>
 
@@ -988,6 +1130,86 @@
         <div class="card-footer">
           <div class="deadline"><span class="deadline-icon">📅</span>23 June 2026 (opens 21 Apr)<span class="days-left" id="dl-mimit"></span></div>
           <a class="card-link" href="https://www.invitalia.it/incentivi-e-strumenti/sviluppo-competenze-specialistiche-delle-pmi" target="_blank" rel="noopener">Invitalia ↗</a>
+        </div>
+      </div>
+
+      <div class="card urgency-rolling" data-category="nazionale"
+           data-kw="contratti sviluppo Invitalia MIMIT large scale industrial RD innovation university industry partnership agevolazione grandi investimenti">
+        <div class="card-top">
+          <span class="card-title">Contratti di Sviluppo — Invitalia</span>
+          <span class="badge-program bp-mimit">MIMIT</span>
+        </div>
+        <p class="card-desc">Large-scale industrial R&amp;D and innovation projects with mandatory university/research centre involvement. Min. investment €20M (industry) or €7.5M (agri-food). Up to 45% grant.</p>
+        <div class="card-meta">
+          <span class="tag">Industry + University</span><span class="tag">Min. €20M</span><span class="tag">R&amp;D mandatory</span><span class="tag">Rolling</span>
+        </div>
+        <div class="card-footer">
+          <div class="deadline"><span class="deadline-icon">📅</span>Rolling — presentazione sportello</div>
+          <a class="card-link" href="https://www.invitalia.it/cosa-facciamo/rafforziamo-le-grandi-imprese/contratti-di-sviluppo" target="_blank" rel="noopener">Invitalia ↗</a>
+        </div>
+      </div>
+
+      <div class="card urgency-rolling" data-category="nazionale"
+           data-kw="Smart Start Italia Invitalia startup innovativa spinoff università brevetto capitale di rischio equity loan">
+        <div class="card-top">
+          <span class="card-title">Smart &amp; Start Italia — Invitalia</span>
+          <span class="badge-program bp-mimit">MIMIT</span>
+        </div>
+        <p class="card-desc">Incentive for innovative startups and academic spinoffs: zero-interest loan up to €1.5M (80% of project costs) + grant for southern Italy projects. No collateral required.</p>
+        <div class="card-meta">
+          <span class="tag">Startup / Spinoff</span><span class="tag">Up to €1.5M</span><span class="tag">South Italy bonus</span><span class="tag">Rolling</span>
+        </div>
+        <div class="card-footer">
+          <div class="deadline"><span class="deadline-icon">📅</span>Rolling — bimonthly windows</div>
+          <a class="card-link" href="https://www.invitalia.it/cosa-facciamo/creiamo-nuove-aziende/smart-start-italia" target="_blank" rel="noopener">Invitalia ↗</a>
+        </div>
+      </div>
+
+      <div class="card urgency-rolling" data-category="nazionale"
+           data-kw="IPCEI Important Projects Common European Interest MIMIT hydrogen batteries microelectronics cloud health strategic industries deep tech">
+        <div class="card-top">
+          <span class="card-title">IPCEI — Important Projects of Common European Interest</span>
+          <span class="badge-program bp-mimit">MIMIT</span>
+        </div>
+        <p class="card-desc">State-aid approved transnational R&amp;D projects in strategic sectors: Hydrogen (Hy2Tech, Hy2Use), Microelectronics (ME/CT), Cloud &amp; Edge (CIS), Batteries (EuBatIn), Health. MIMIT coordinates Italian participation. New IPCEI Health call expected 2026.</p>
+        <div class="card-meta">
+          <span class="tag">Strategic industries</span><span class="tag">Transnational</span><span class="tag">State aid approved</span><span class="tag">Large companies + RTOs</span>
+        </div>
+        <div class="card-footer">
+          <div class="deadline"><span class="deadline-icon">📅</span>Rolling — per IPCEI Health: expected 2026</div>
+          <a class="card-link" href="https://www.mimit.gov.it/it/incentivi/ipcei" target="_blank" rel="noopener">MIMIT IPCEI ↗</a>
+        </div>
+      </div>
+
+      <div class="card urgency-rolling" data-category="nazionale"
+           data-kw="accordi innovazione MIMIT Invitalia applied research industrial university collaboration R&D co-funding medium large companies">
+        <div class="card-top">
+          <span class="card-title">Accordi per l'Innovazione — MIMIT / Invitalia</span>
+          <span class="badge-program bp-mimit">MIMIT</span>
+        </div>
+        <p class="card-desc">Co-funded applied R&amp;D projects between companies and universities/research organisations. Grant up to 50% for medium companies, 60% for small. Min. project cost €5M. University partner mandatory.</p>
+        <div class="card-meta">
+          <span class="tag">University + Industry</span><span class="tag">Applied R&amp;D</span><span class="tag">Min. €5M project</span><span class="tag">Rolling</span>
+        </div>
+        <div class="card-footer">
+          <div class="deadline"><span class="deadline-icon">📅</span>Rolling — sportello aperto</div>
+          <a class="card-link" href="https://www.invitalia.it/cosa-facciamo/rafforziamo-le-grandi-imprese/accordi-per-linnovazione" target="_blank" rel="noopener">Invitalia ↗</a>
+        </div>
+      </div>
+
+      <div class="card urgency-rolling" data-category="nazionale"
+           data-kw="brevetti+ Invitalia MIMIT patent valorisation IP industrial property academic spinoff commercialisation">
+        <div class="card-top">
+          <span class="card-title">Brevetti+ — Patent Valorisation (Invitalia)</span>
+          <span class="badge-program bp-mimit">MIMIT</span>
+        </div>
+        <p class="card-desc">Grant up to €140K for valorisation of Italian patents: prototyping, feasibility studies, IP commercialisation. Open to companies, universities and research centres. 80% co-funding rate.</p>
+        <div class="card-meta">
+          <span class="tag">Patents / IP</span><span class="tag">Up to €140K</span><span class="tag">80% grant</span><span class="tag">Rolling</span>
+        </div>
+        <div class="card-footer">
+          <div class="deadline"><span class="deadline-icon">📅</span>Rolling — check Invitalia for open windows</div>
+          <a class="card-link" href="https://www.invitalia.it/cosa-facciamo/creiamo-nuove-aziende/brevetti" target="_blank" rel="noopener">Invitalia ↗</a>
         </div>
       </div>
 
@@ -1239,6 +1461,70 @@
         </div>
       </div>
 
+      <div class="card urgency-rolling" data-category="regionale"
+           data-kw="FESR Puglia ERDF 2021-2027 research innovation enterprises competitiveness technology transfer university industry POR">
+        <div class="card-top">
+          <span class="card-title">FESR Puglia 2021–2027 — R&amp;I Calls (POR)</span>
+          <span class="badge-program bp-puglia">Puglia Region</span>
+        </div>
+        <p class="card-desc">ERDF Regional Programme 2021–2027: calls for R&amp;I, technology transfer, SME competitiveness, digital transition and clean energy. Multiple ongoing and planned calls across axes 1–4. Monitor Sistema Puglia for new openings.</p>
+        <div class="card-meta">
+          <span class="tag">ERDF / FESR</span><span class="tag">R&amp;I + SME</span><span class="tag">Digital + Green</span><span class="tag">Rolling</span>
+        </div>
+        <div class="card-footer">
+          <div class="deadline"><span class="deadline-icon">📅</span>Rolling — multiple calls/year</div>
+          <a class="card-link" href="https://www.sistema.puglia.it/portal/page/portal/SistemaPuglia/BandiAgevolazioni" target="_blank" rel="noopener">Sistema Puglia ↗</a>
+        </div>
+      </div>
+
+      <div class="card urgency-rolling" data-category="regionale"
+           data-kw="FSE Puglia ESF+ social fund training research scholarships inclusion employment higher education universities">
+        <div class="card-top">
+          <span class="card-title">FSE+ Puglia — Research Scholarships &amp; Training</span>
+          <span class="badge-program bp-puglia">Puglia Region</span>
+        </div>
+        <p class="card-desc">European Social Fund+ Puglia: research grants, postgraduate scholarships, PhD co-funding, professional training for researchers and technicians. Published by Puglia Region / ARPAL. Continuous openings throughout the year.</p>
+        <div class="card-meta">
+          <span class="tag">ESF+</span><span class="tag">Scholarships</span><span class="tag">Research training</span><span class="tag">Rolling</span>
+        </div>
+        <div class="card-footer">
+          <div class="deadline"><span class="deadline-icon">📅</span>Rolling — check ARPAL / Regione Puglia</div>
+          <a class="card-link" href="https://www.regione.puglia.it/web/ricerca/bandi" target="_blank" rel="noopener">Puglia Region ↗</a>
+        </div>
+      </div>
+
+      <div class="card urgency-rolling" data-category="regionale"
+           data-kw="Poli Innovazione Puglia technology clusters innovation hubs research university industry network collaboration">
+        <div class="card-top">
+          <span class="card-title">Poli di Innovazione — Puglia Technology Clusters</span>
+          <span class="badge-program bp-puglia">Puglia Region</span>
+        </div>
+        <p class="card-desc">Calls for collaborative R&amp;D and technology transfer within Puglia's 9 innovation clusters (Agrifood, Aeronautics, Energy, ICT, Biopharma, Mechatronics, Creative Industries, Shipbuilding, Construction). University participation encouraged.</p>
+        <div class="card-meta">
+          <span class="tag">Clusters / Networks</span><span class="tag">University + Industry</span><span class="tag">9 sectors</span><span class="tag">Rolling</span>
+        </div>
+        <div class="card-footer">
+          <div class="deadline"><span class="deadline-icon">📅</span>Rolling — per cluster</div>
+          <a class="card-link" href="https://www.sistema.puglia.it/portal/page/portal/SistemaPuglia/BandiAgevolazioni" target="_blank" rel="noopener">Sistema Puglia ↗</a>
+        </div>
+      </div>
+
+      <div class="card urgency-rolling" data-category="regionale"
+           data-kw="Contratti Programma Puglia large investment production research development infrastructure regional development agreement">
+        <div class="card-top">
+          <span class="card-title">Contratti di Programma — Puglia Region</span>
+          <span class="badge-program bp-puglia">Puglia Region</span>
+        </div>
+        <p class="card-desc">Negotiated agreements for large productive investments in Puglia (min. €7.5M). Grant up to 45%. Mandatory R&amp;D and job creation components. Particularly relevant for industry–university joint projects.</p>
+        <div class="card-meta">
+          <span class="tag">Large investments</span><span class="tag">Min. €7.5M</span><span class="tag">R&amp;D + jobs</span><span class="tag">Rolling</span>
+        </div>
+        <div class="card-footer">
+          <div class="deadline"><span class="deadline-icon">📅</span>Rolling — sportello aperto</div>
+          <a class="card-link" href="https://www.regione.puglia.it/web/competitivita-e-innovazione/elenco-bandi" target="_blank" rel="noopener">Puglia Region ↗</a>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -1312,6 +1598,12 @@
     'dl-prinh':   '2026-04-30',
     'dl-synergy': '2026-09-30',
     'dl-taranto': '2026-12-31',
+    'dl-stg':     '2026-10-15',
+    'dl-cog':     '2027-01-15',
+    'dl-widera':  '2026-09-17',
+    'dl-prima':   '2026-06-15',
+    'dl-erasmus': '2027-02-05',
+    'dl-zp':      '2026-04-15',
   };
 
   // Apply urgency classes and day badges from real dates
@@ -1413,9 +1705,286 @@
   window.resetFilters  = resetFilters;
   window.applyFilters  = applyFilters;
 
+  // Re-sync cards array after dynamic injection (used by auto-discovery below)
+  window.refreshCards = function() {
+    cards = Array.from(document.querySelectorAll('.card'));
+    searchStrings = cards.map(buildSearchString);
+    applyFilters();
+  };
+
   // Init
   applyFilters();
 })();
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   AUTO-DISCOVERY — fetches open calls live from EU Funding & Tenders Portal.
+   Runs every time the page loads (requires internet).
+   Fails silently if offline or if CORS is blocked — hardcoded calls still show.
+   No Python, no server, no extra files — everything in this single HTML file.
+   ══════════════════════════════════════════════════════════════════════════════ */
+(function autoDiscover() {
+  'use strict';
+
+  var FT_API = 'https://api.tech.ec.europa.eu/search-api/prod/rest/search';
+  var FT_KEY = 'SOWAMDYWSUW3BR3Y';   // public key from EC portal JS bundle
+  var TODAY  = new Date();
+
+  /* ── Collect existing card titles to skip already-shown calls ── */
+  var existingTitles = new Set(
+    Array.from(document.querySelectorAll('.card-title'))
+      .map(function(el) { return el.textContent.trim().toLowerCase().slice(0, 45); })
+  );
+
+  /* ── Helpers ── */
+  function escHtml(s) {
+    return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
+                    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  var _mo = ['January','February','March','April','May','June',
+             'July','August','September','October','November','December'];
+  function fmtDate(iso) {
+    try { var d = new Date(iso + 'T12:00:00');
+          return d.getDate()+' '+_mo[d.getMonth()]+' '+d.getFullYear(); }
+    catch(e) { return iso || 'TBD'; }
+  }
+
+  function daysDiff(iso) {
+    return Math.ceil((new Date(iso + 'T12:00:00') - TODAY) / 86400000);
+  }
+
+  function urgClass(d) {
+    if (d < 0)   return 'urgency-expired';
+    if (d <= 15) return 'urgency-critical';
+    if (d <= 45) return 'urgency-high';
+    if (d <= 90) return 'urgency-medium';
+    return 'urgency-low';
+  }
+
+  function detectBadge(text) {
+    var u = text.toUpperCase();
+    if (/\bMSCA\b/.test(u))       return ['MSCA',          'bp-msca'];
+    if (/\bEIC[\b\-]/.test(u))    return ['EIC',           'bp-eic'];
+    if (/\bERC[\b\-]/.test(u))    return ['ERC',           'bp-erc'];
+    if (/\bLIFE[\b\-]/.test(u))   return ['LIFE',          'bp-life'];
+    if (/INTERREG/.test(u))       return ['Interreg',      'bp-interreg'];
+    if (/MIMIT|INVITALIA/.test(u)) return ['MIMIT',        'bp-mimit'];
+    if (/\bSTEP\b/.test(u))       return ['STEP',          'bp-step'];
+    return ['Horizon Europe', 'bp-horizon'];
+  }
+
+  /* ── Build one card element from an API result ── */
+  function buildCard(r) {
+    var title = (r.title || '').trim();
+    if (!title) return null;
+
+    var id    = (r.identifier || '').trim();
+    var desc  = (r.description || r.callDescription || '').slice(0, 230).trim()
+                || 'New call from EU Funding & Tenders Portal.';
+    var rawDL = r.deadlineDate;
+    if (Array.isArray(rawDL)) rawDL = rawDL[0] || '';
+    var iso   = (typeof rawDL === 'string' && rawDL.length >= 10) ? rawDL.slice(0,10) : '';
+    var url   = r.callDetailsUrl
+                || 'https://ec.europa.eu/info/funding-tenders/opportunities/portal/';
+
+    var days  = iso ? daysDiff(iso) : 999;
+    var badge = detectBadge(title + ' ' + id);
+    var dlLabel = iso
+      ? fmtDate(iso) + ' <span class="days-left">'
+          + (days < 0 ? 'expired' : days === 0 ? 'today!' : days + 'd') + '</span>'
+      : 'TBD — see portal';
+
+    var card = document.createElement('div');
+    card.className = 'card ' + urgClass(days);
+    card.setAttribute('data-category', 'europeo');
+    card.setAttribute('data-kw',
+      (title + ' ' + id + ' auto eu portal horizon').toLowerCase());
+
+    card.innerHTML =
+      '<div class="card-top">' +
+        '<span class="card-title">' + escHtml(title.slice(0, 80)) + '</span>' +
+        '<span class="badge-program ' + badge[1] + '">' + badge[0] + '</span>' +
+      '</div>' +
+      '<p class="card-desc">' + escHtml(desc) + '</p>' +
+      '<div class="card-meta">' +
+        '<span class="tag" style="background:#e8fff5;border-color:#aadecc;color:#007a50">' +
+          '🆕 Auto-discovered</span>' +
+        (id ? '<span class="tag">' + escHtml(id.slice(0, 28)) + '</span>' : '') +
+      '</div>' +
+      '<div class="card-footer">' +
+        '<div class="deadline"><span class="deadline-icon">📅</span>' + dlLabel + '</div>' +
+        '<a class="card-link" href="' + escHtml(url) + '" target="_blank" ' +
+           'rel="noopener">Portal ↗</a>' +
+      '</div>';
+
+    return card;
+  }
+
+  /* Expose buildCard globally for discover panel */
+  window._buildCard = buildCard;
+
+  /* ── Query EU Funding & Tenders Portal ── */
+  var query = JSON.stringify({
+    bool: { must: [
+      { terms: { type:   ['1'] } },          // calls for proposals
+      { terms: { status: ['31094501','31094502'] } }  // open or forthcoming
+    ]}
+  });
+
+  fetch(FT_API + '?' + new URLSearchParams({
+    apiKey: FT_KEY, text: '*', pageSize: 100, pageNumber: 1,
+    sortBy: 'DEADLINE_DATE', sortOrder: 'ASC', query: query
+  }))
+  .then(function(res) { return res.json(); })
+  .then(function(data) {
+    /* Keep only calls not already shown in the hardcoded cards */
+    var fresh = (data.results || []).filter(function(r) {
+      var t = (r.title || '').trim().toLowerCase().slice(0, 45);
+      return t && !existingTitles.has(t);
+    });
+
+    if (!fresh.length) {
+      console.log('[UniBA Scouting] Auto-discovery: all EU portal calls already shown.');
+      return;
+    }
+
+    /* Build the new section */
+    var sec = document.createElement('div');
+    sec.className = 'section';
+    sec.id = 'sec-autodiscovered';
+    sec.setAttribute('data-category', 'europeo');
+    sec.innerHTML =
+      '<div class="section-header" style="border-left-color:#00cc88">' +
+        '<span class="section-icon">🆕</span>' +
+        '<h2>Auto-discovered — EU Funding Portal</h2>' +
+        '<span class="section-count" id="cnt-autodiscovered"></span>' +
+      '</div>' +
+      '<div class="cards-grid"></div>';
+
+    var grid  = sec.querySelector('.cards-grid');
+    var added = 0;
+    fresh.forEach(function(r) {
+      var card = buildCard(r);
+      if (card) { grid.appendChild(card); added++; }
+    });
+
+    if (added > 0) {
+      /* Insert section before the empty-state message */
+      var emptyState = document.getElementById('emptyState');
+      emptyState.parentNode.insertBefore(sec, emptyState);
+      /* Re-sync the filter/search engine with the new cards */
+      if (typeof window.refreshCards === 'function') window.refreshCards();
+      console.log('[UniBA Scouting] Auto-discovered ' + added + ' new calls from EU Portal.');
+    }
+  })
+  .catch(function(e) {
+    /* Offline / CORS blocked — fails silently, hardcoded calls still work */
+    console.log('[UniBA Scouting] Auto-discovery skipped (offline or CORS):', e.message);
+  });
+
+})();
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   DISCOVER PANEL — "Discover new calls" button
+   Queries EU F&T Portal for ALL open calls (RIA, IA, CSA, MSCA, EIC, ERC…)
+   and adds to dashboard any call not already shown.
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+function toggleDiscoverPanel() {
+  var p = document.getElementById('discoverPanel');
+  p.style.display = p.style.display === 'none' ? 'block' : 'none';
+}
+window.toggleDiscoverPanel = toggleDiscoverPanel;
+
+function runDiscovery() {
+  var btn = document.getElementById('btnRunDiscover');
+  var statusEl = document.getElementById('discoverStatus');
+  var FT_API = 'https://api.tech.ec.europa.eu/search-api/prod/rest/search';
+  var FT_KEY = 'SOWAMDYWSUW3BR3Y';
+
+  btn.disabled = true;
+  btn.textContent = '⏳ Searching…';
+  statusEl.innerHTML = '⏳ Querying EU Funding &amp; Tenders Portal (all open calls: RIA, IA, CSA, MSCA, EIC, ERC, LIFE, Interreg…)';
+
+  /* Collect already-shown titles to skip duplicates */
+  var existingTitles = new Set(
+    Array.from(document.querySelectorAll('.card-title'))
+      .map(function(el) { return el.textContent.trim().toLowerCase().slice(0, 45); })
+  );
+
+  var query = JSON.stringify({ bool: { must: [
+    { terms: { type:   ['1'] } },
+    { terms: { status: ['31094501', '31094502'] } }   /* open + forthcoming */
+  ]}});
+
+  fetch(FT_API + '?' + new URLSearchParams({
+    apiKey: FT_KEY, text: '*', pageSize: 200, pageNumber: 1,
+    sortBy: 'DEADLINE_DATE', sortOrder: 'ASC', query: query
+  }))
+  .then(function(res) { return res.json(); })
+  .then(function(data) {
+    var results = data.results || [];
+    statusEl.innerHTML = '✅ EU Portal: <strong>' + results.length + ' open calls</strong> retrieved. Filtering new ones…';
+
+    /* Filter duplicates */
+    var fresh = results.filter(function(r) {
+      var t = (r.title || '').trim().toLowerCase().slice(0, 45);
+      return t && !existingTitles.has(t);
+    });
+
+    if (!fresh.length) {
+      statusEl.innerHTML = '✅ All ' + results.length + ' EU portal calls are already shown in the dashboard. Dashboard is up to date!';
+      btn.disabled = false;
+      btn.textContent = '▶ Discover now';
+      return;
+    }
+
+    /* Get or create the auto-discovered section */
+    var sec = document.getElementById('sec-autodiscovered');
+    if (!sec) {
+      sec = document.createElement('div');
+      sec.className = 'section';
+      sec.id = 'sec-autodiscovered';
+      sec.setAttribute('data-category', 'europeo');
+      sec.innerHTML =
+        '<div class="section-header" style="border-left-color:#00cc88">' +
+          '<span class="section-icon">🆕</span>' +
+          '<h2>Auto-discovered — EU Funding Portal</h2>' +
+          '<span class="section-count" id="cnt-autodiscovered"></span>' +
+        '</div>' +
+        '<div class="cards-grid"></div>';
+      var emptyState = document.getElementById('emptyState');
+      emptyState.parentNode.insertBefore(sec, emptyState);
+    }
+    var grid = sec.querySelector('.cards-grid');
+
+    /* Use the buildCard function exposed by autoDiscover IIFE */
+    var builder = window._buildCard;
+    var added = 0;
+    if (builder) {
+      fresh.forEach(function(r) {
+        var card = builder(r);
+        if (card) { grid.appendChild(card); added++; existingTitles.add((r.title||'').toLowerCase().slice(0,45)); }
+      });
+    }
+
+    if (typeof window.refreshCards === 'function') window.refreshCards();
+
+    statusEl.innerHTML =
+      '✅ <strong>' + added + ' new calls added</strong> to dashboard' +
+      ' (' + (results.length - fresh.length) + ' already shown, ' + fresh.length + ' new).' +
+      ' <span style="color:#008A50">Scroll down to "Auto-discovered" section to see them.</span>';
+    btn.disabled = false;
+    btn.textContent = '▶ Refresh again';
+  })
+  .catch(function(e) {
+    statusEl.innerHTML = '⚠ Could not reach EU Portal: ' + e.message +
+      '. Check your internet connection or try again later.';
+    btn.disabled = false;
+    btn.textContent = '▶ Discover now';
+  });
+}
+window.runDiscovery = runDiscovery;
 </script>
 </body>
 </html>
