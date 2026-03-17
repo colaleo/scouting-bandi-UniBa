@@ -49,12 +49,12 @@ FASI_RSS = "https://fasi.eu/it/news.feed?type=rss"
 
 # ── Fonti italiane e regionali ────────────────────────────────────────────────
 SOURCES_IT = [
-    ("MUR",           "https://www.mur.gov.it/it/avvisi-bandi-e-comunicati/avvisi-e-bandi"),
+    ("MUR",           "https://www.mur.gov.it/it/avvisi-bandi-e-comunicati"),
     ("MIMIT",         "https://www.mimit.gov.it/it/incentivi"),
-    ("INVITALIA",     "https://www.invitalia.it/cosa-facciamo/incentivi"),
+    ("INVITALIA",     "https://www.invitalia.it/cosa-facciamo"),
     ("AIFA",          "https://www.aifa.gov.it/ricerca-clinica-indipendente"),
-    ("PUGLIA",        "https://www.regione.puglia.it/web/ricerca/bandi"),
-    ("SISTEMAPUGLIA", "https://www.sistema.puglia.it/portal/page/portal/SistemaPuglia/BandiAgevolazioni"),
+    ("PUGLIA",        "https://www.regione.puglia.it/web/attivita-produttive/bandi"),
+    ("SISTEMAPUGLIA", "https://sistema.puglia.it/SistemaPuglia/bandi"),
 ]
 
 # ── Programme → (section_id, data-category, badge_css, badge_label) ──────────
@@ -201,7 +201,7 @@ def is_duplicate(title: str, identifier: str, dl_ids: set, titles: set) -> bool:
 #  GENERAZIONE CARD
 # ══════════════════════════════════════════════════════════════════════════════
 
-def generate_card(title, desc, identifier, deadline_iso, url, tags, source=""):
+def generate_card(title, description, identifier, deadline_iso, url, tags, source=""):
     prog = detect_programme(title + " " + identifier + " " + source)
     section_id, category, badge_cls, badge_label = PROG_MAP[prog]
     dl_id = make_dl_id(identifier) if deadline_iso else None
@@ -233,7 +233,7 @@ def generate_card(title, desc, identifier, deadline_iso, url, tags, source=""):
         f'          <span class="card-title">{esc(title[:80])}</span>\n'
         f'          <span class="badge-program {badge_cls}">{badge_label}</span>\n'
         f'        </div>\n'
-        f'        <p class="card-desc">{esc(desc[:230])}</p>\n'
+        f'        <p class="card-desc">{esc(description[:230])}</p>\n'
         f'        <div class="card-meta">{tags_html}</div>\n'
         f'        <div class="card-footer">\n'
         f'          <div class="deadline"><span class="deadline-icon">📅</span>'
@@ -289,14 +289,22 @@ def add_deadline_js(html: str, dl_id: str, iso: str) -> str:
 def fetch_eu_portal(dl_ids, titles):
     print("📡  EU Funding & Tenders Portal…")
     try:
-        resp = requests.get(FT_API, params={
-            "apiKey": FT_KEY, "text": "*", "pageSize": 150, "pageNumber": 1,
-            "sortBy": "DEADLINE_DATE", "sortOrder": "ASC",
+        payload = {
+            "apiKey": FT_KEY,
+            "text": "*",
+            "pageSize": 150,
+            "pageNumber": 1,
+            "sortBy": "DEADLINE_DATE",
+            "sortOrder": "ASC",
             "query": json.dumps({"bool": {"must": [
                 {"terms": {"type": ["1"]}},
                 {"terms": {"status": ["31094501", "31094502"]}},
             ]}}),
-        }, headers=HEADERS, timeout=30)
+        }
+        resp = requests.post(FT_API, json=payload, headers=HEADERS, timeout=30)
+        if resp.status_code == 405:
+            # fallback a GET
+            resp = requests.get(FT_API, params=payload, headers=HEADERS, timeout=30)
         resp.raise_for_status()
         results = resp.json().get("results", [])
         print(f"   → {len(results)} call trovate")
