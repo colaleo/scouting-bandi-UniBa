@@ -50,10 +50,10 @@ FASI_RSS = "https://fasi.eu/it/news.feed?type=rss"
 # ── Fonti italiane e regionali ────────────────────────────────────────────────
 SOURCES_IT = [
     ("MUR",           "https://www.mur.gov.it/it/avvisi-bandi-e-comunicati"),
-    ("MIMIT",         "https://www.mimit.gov.it/it/incentivi"),
-    ("INVITALIA",     "https://www.invitalia.it/cosa-facciamo"),
+    ("MIMIT",         "https://www.mimit.gov.it/it/incentivi/ricerca-e-sviluppo"),
+    ("INVITALIA",     "https://www.invitalia.it/cosa-facciamo/rafforziamo-le-imprese"),
     ("AIFA",          "https://www.aifa.gov.it/ricerca-clinica-indipendente"),
-    ("PUGLIA",        "https://www.regione.puglia.it/web/attivita-produttive/bandi"),
+    ("PUGLIA",        "https://www.regione.puglia.it/web/ricerca-e-innovazione"),
     ("SISTEMAPUGLIA", "https://sistema.puglia.it/SistemaPuglia/bandi"),
 ]
 
@@ -106,6 +106,32 @@ FASI_SIGNALS = [
     "bando", "call", "aperto", "scadenza", "deadline", "finanziamento",
     "horizon", "msca", "eic", "erc", "life", "interreg", "prin",
     "pnrr", "mimit", "invitalia", "puglia", "aifa", "mur bando",
+]
+
+# Parole chiave che qualificano un item come bando di RICERCA/PROGETTUALITÀ
+# (filtra via incentivi PMI, mutui, tax credit, voucher non pertinenti)
+RESEARCH_SIGNALS = [
+    "ricerca", "research", "innovazione", "innovation", "progetto", "project",
+    "bando", "call", "avviso", "finanziamento", "grant", "funding",
+    "prin", "pnrr", "horizon", "msca", "eic", "erc", "life", "interreg",
+    "dottorato", "phd", "fellowship", "partenariato", "partnership",
+    "r&s", "r&d", "sviluppo sperimentale", "ricerca industriale",
+    "accordo", "ipcei", "ecosistema", "cluster", "polo di innovazione",
+    "trasferimento tecnologico", "spin", "start-up", "startup",
+    "brevetto", "patent", "proof of concept", "feasibility",
+    "aifa", "ricerca clinica", "ricerca indipendente",
+    "minipia", "pia innova", "tecnonidi", "jtf", "just transition",
+]
+
+# Parole chiave che ESCLUDONO un item (incentivi non pertinenti)
+RESEARCH_EXCLUDE = [
+    "nuova sabatini", "sabatini", "mutuo", "leasing", "finanziamento agevolato macchinari",
+    "voucher digitalizzazione pmi", "credito d'imposta beni strumentali",
+    "contratti di sviluppo produttivo",  # solo quelli senza R&S
+    "resto al sud",  # per imprenditori under 46, non atenei
+    "autoimprenditorialità", "autoimpiego",
+    "registrazione farmaco", "autorizzazione immissione",
+    "gara d'appalto", "appalto", "procurement",
 ]
 
 
@@ -419,6 +445,14 @@ def scrape_source(name, url, dl_ids, titles):
             if is_duplicate(title, idf, dl_ids, titles):
                 continue
             text = item.get_text(" ", strip=True)
+
+            # Filtra: solo bandi pertinenti a ricerca/progettualità
+            combined_low = (title + " " + text).lower()
+            if not any(sig in combined_low for sig in RESEARCH_SIGNALS):
+                continue
+            if any(exc in combined_low for exc in RESEARCH_EXCLUDE):
+                continue
+
             desc_el = item.select_one("p, .description, .abstract")
             desc = (desc_el.get_text(strip=True)[:250] if desc_el
                     else f"Bando da {name}. Verifica dettagli sul portale.")
