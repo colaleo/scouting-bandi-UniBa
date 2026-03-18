@@ -474,8 +474,10 @@ def scrape_source(name, url, dl_ids, titles):
                 continue
 
             desc_el = item.select_one("p, .description, .abstract")
-            desc = (desc_el.get_text(strip=True)[:250] if desc_el
-                    else f"Bando da {name}. Verifica dettagli sul portale.")
+            desc = desc_el.get_text(strip=True)[:250] if desc_el else ""
+            # Scarta card senza descrizione reale — qualità insufficiente
+            if not desc or len(desc) < 30:
+                continue
             calls.append({
                 "title": title, "identifier": idf, "description": desc,
                 "deadline_iso": parse_date(text),
