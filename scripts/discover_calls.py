@@ -49,12 +49,12 @@ FASI_RSS = "https://fasi.eu/it/news.feed?type=rss"
 
 # ── Fonti italiane e regionali ────────────────────────────────────────────────
 SOURCES_IT = [
-    ("MUR",           "https://www.mur.gov.it/it/avvisi-bandi-e-comunicati"),
-    ("MIMIT",         "https://www.mimit.gov.it/it/incentivi/ricerca-e-sviluppo"),
-    ("INVITALIA",     "https://www.invitalia.it/cosa-facciamo/rafforziamo-le-imprese"),
+    ("MUR",           "https://www.mur.gov.it/it/aree-tematiche/ricerca"),
+    ("MIMIT",         "https://www.mimit.gov.it/it/incentivi-mise/ricerca-e-innovazione"),
+    ("INVITALIA",     "https://www.invitalia.it/per-le-imprese/incentivi-e-strumenti"),
     ("AIFA",          "https://www.aifa.gov.it/ricerca-clinica-indipendente"),
-    ("PUGLIA",        "https://www.regione.puglia.it/web/ricerca-e-innovazione"),
-    ("SISTEMAPUGLIA", "https://sistema.puglia.it/SistemaPuglia/bandi"),
+    ("PUGLIA",        "https://www.regione.puglia.it/it/web/competitivita-e-innovazione/elenco-bandi"),
+    ("SISTEMAPUGLIA", "https://sistema.regione.puglia.it/it/catalogo-bandi"),
 ]
 
 # ── Programme → (section_id, data-category, badge_css, badge_label) ──────────
