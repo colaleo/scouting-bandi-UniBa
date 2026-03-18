@@ -127,11 +127,28 @@ RESEARCH_SIGNALS = [
 RESEARCH_EXCLUDE = [
     "nuova sabatini", "sabatini", "mutuo", "leasing", "finanziamento agevolato macchinari",
     "voucher digitalizzazione pmi", "credito d'imposta beni strumentali",
-    "contratti di sviluppo produttivo",  # solo quelli senza R&S
-    "resto al sud",  # per imprenditori under 46, non atenei
-    "autoimprenditorialità", "autoimpiego",
+    "contratti di sviluppo produttivo",
+    "resto al sud", "autoimprenditorialità", "autoimpiego",
     "registrazione farmaco", "autorizzazione immissione",
     "gara d'appalto", "appalto", "procurement",
+    # Elementi di navigazione / intestazioni di pagina (non sono bandi)
+    "vai al contenuto", "vai al sito", "salta al contenuto",
+    "il sistema della ricerca", "valutazione della ricerca",
+    "programmi di finanziamento",
+    # Agevolazioni fiscali / contributi non pertinenti
+    "credito d'imposta ricerca", "liquidazione contributi",
+    "voucher 3i", "voucher per consulenza",
+    # Sezioni organizzative non-bando
+    "commercio artigianato", "internazionalizzazione delle imprese",
+    "avviso a sportello con valutazione",
+]
+
+# Titoli troppo corti o generici da escludere (navigazione, header)
+TITLE_BLACKLIST = [
+    "ricerca e innovazione", "competitività e innovazione",
+    "ricerca internazionale", "iniziative speciali",
+    "programmi di finanziamento", "horizon europe",
+    "eric e infrastrutture", "il sistema della ricerca",
 ]
 
 
@@ -434,7 +451,10 @@ def scrape_source(name, url, dl_ids, titles):
             if not title_el:
                 continue
             title = title_el.get_text(strip=True)
-            if not (10 < len(title) < 250):
+            if not (15 < len(title) < 250):
+                continue
+            # Escludi titoli che sono header/navigazione (blacklist esatta)
+            if title.strip().lower() in TITLE_BLACKLIST:
                 continue
             link = link_el["href"] if link_el else url
             if link.startswith("/"):
