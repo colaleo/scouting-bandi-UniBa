@@ -1,8 +1,7 @@
-# Discovery Log — 2026-03-30
+# Discovery Log — 2026-04-06
 
-Aggiunti **2** bandi.
+Aggiunti **1** bandi.
 
 | Fonte | Titolo | Scadenza |
 |-------|--------|----------|
-| INVITALIA | Credito d’imposta per incubatori e acceleratori certifi | 2026-03-30 |
 | INVITALIA | Smart&Start Italia | TBD |
