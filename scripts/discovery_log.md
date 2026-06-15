@@ -1,8 +1,7 @@
-# Discovery Log — 2026-06-08
+# Discovery Log — 2026-06-15
 
-Aggiunti **2** bandi.
+Aggiunti **1** bandi.
 
 | Fonte | Titolo | Scadenza |
 |-------|--------|----------|
-| INVITALIA | Fondo di partecipazione MUR | 2026-06-05 |
 | INVITALIA | Smart&Start Italia | TBD |
