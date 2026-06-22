@@ -1,4 +1,4 @@
-# Discovery Log — 2026-06-15
+# Discovery Log — 2026-06-22
 
 Aggiunti **1** bandi.
 
